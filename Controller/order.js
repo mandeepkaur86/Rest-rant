@@ -10,4 +10,4 @@ router.get('/',(req,res) => {
 router.get('/Appetizer',(req,res) => {
     res.send(`<h1>Bhelpuri</h1>`)
 })
-module.exports = router;
+module.exports = router
