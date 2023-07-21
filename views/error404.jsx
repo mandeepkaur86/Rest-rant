@@ -6,6 +6,7 @@ function error404 () {
       <Defe>
           <main>
               <h1>404: PAGE NOT FOUND</h1>
+              <img width='50%'src='./images/404.jpg' alt='404error' />
               <p>Oops, sorry, we can't find this page!</p>
           </main>
       </Defe>
