@@ -36,6 +36,8 @@ app.get('*/',(req,res) =>{
 // db connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }) .then(() => console.log('DB connected')) .catch(err => console.error(err));
 
+//
+
 
 //listen for connections
 const  PORT = process.env.PORT

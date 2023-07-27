@@ -1,12 +1,14 @@
 const router = require('express').Router()
-const db =require('../models')
+const db = require('../models')
+const comment = require('../models/comment')
 
+// GET all places index page
 router.get('/', (req, res) => {
   db.Place.find()
-  .then((places) =>{
-    res.render('places/index',{places})
+  .then((places) => {
+    res.render('places/index', { places })
   })
-  .catch(err =>{
+  .catch(err => {
     console.log(err)
     res.render('error404')
   })
@@ -14,11 +16,11 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   db.Place.create(req.body)
-  .then(() =>{
+  .then(() => {
     res.redirect('/places')
   })
-  .catch(err =>{
-    console.log('err',err)
+  .catch(err => {
+    console.log('err', err)
     res.render('error404')
   })
 })
@@ -27,17 +29,19 @@ router.get('/new', (req, res) => {
   res.render('places/new')
 })
 
-// GET show routes or place by id
+// GET place details by id (show.js)
 router.get('/:id', (req, res) => {
-  db.Place.findById(req.params.id)
-  .then(place =>{
-    res.render('places/show',{place})
+  db.Place.findById(req.params.id).populate('comments')
+  .then(place => {
+    console.log(place.comments)
+    res.render('places/show', { place })
   })
-  .catch(err =>{
-    console.log('err',err)
+  .catch(err => {
+    console.log('err', err)
     res.render('error404')
   })
 })
+
 router.put('/:id', (req, res) => {
   res.send('PUT /places/:id stub')
 })
@@ -51,7 +55,29 @@ router.get('/:id/edit', (req, res) => {
 })
 
 router.post('/:id/rant', (req, res) => {
-  res.send('GET /places/:id/rant stub')
+  console.log('post comment', req.body)
+    if (req.body.author === '') { req.body.author = undefined }
+    req.body.rant = req.body.rant ? true : false
+    db.Place.findById(req.params.id)
+        .then(place => {
+            db.Comment.create(req.body)
+                .then(comment => {
+                    place.comments.push(comment.id)
+                    place.save()
+                        .then(() => {
+                            res.redirect(`/places/${req.params.id}`)
+                        })
+                        .catch(err => {
+                            res.render('error404', err)
+                        })
+                })
+                .catch(err => {
+                    res.render('error404', err)
+                })
+        })
+        .catch(err => {
+            res.render('error404', err)
+        })
 })
 
 router.delete('/:id/rant/:rantId', (req, res) => {
@@ -59,5 +85,3 @@ router.delete('/:id/rant/:rantId', (req, res) => {
 })
 
 module.exports = router
-
-  
