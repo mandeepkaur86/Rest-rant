@@ -2,12 +2,14 @@ const React =require('react')
 const Def =require('../default')
 
 function edit_form(data){
+
     return(
         <Def>
             <main>
                 <h1>Edit Place</h1>
-                <form method="POST" action={`/places/${data.id}?_method=PUT`}>
+                <form method="POST" action={`/places/${data.place.id}?_method=PUT`}>
                     <div className="row">
+
                         <div className="form-group col-sm-6">
                             <label htmlfor="name">Place Name</label>
                             <input className="form-control" id="name" name="name" defaultValue={data.place.name}/>
@@ -31,8 +33,13 @@ function edit_form(data){
                             <label htmlfor="cuisines">cuisines</label>
                             <input className="form-control" id="cuisines" name="cuisines"defaultValue={data.place.cuisines}/> 
                         </div>
+                        <div className="form-group col-sm-4">
+                            <label htmlFor="Founded">Founded</label>
+                            <input className="form-control" id="founded" name="founded" value={data.place.founded}/>
+
                         </div>
-                        <input className="btn btn-primary" type="submit" value="Add Place"/>
+                        </div>
+                        <input className="btn btn-primary" type="submit" value="Update Place"/>
                         
                  </form>
             </main>
